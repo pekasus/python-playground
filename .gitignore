@@ -1,5 +1,10 @@
 .DS_Store
 .idea/
+
+office/mail-merge/Output/ReadyToSend/*.txt
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
