@@ -1,22 +1,39 @@
-##################### Hard Starting Project ######################
+from datetime import datetime
+import pandas as pd
+import random
+import smtplib
 
-# 1. Update the birthdays.csv with your friends & family's details. 
-# HINT: Make sure one of the entries matches today's date for testing purposes. 
+def send_email(to_email, message):
+    my_gmail = "NyetWork001@gmail.com"
+    my_yahoo = "NyetWork001@yahoo.com"
 
-# 2. Check if today matches a birthday in the birthdays.csv
-# HINT 1: Only the month and day matter. 
-# HINT 2: You could create a dictionary from birthdays.csv that looks like this:
-# birthdays_dict = {
-#     (month, day): data_row
-# }
-#HINT 3: Then you could compare and see if today's month/day matches one of the keys in birthday_dict like this:
-# if (today_month, today_day) in birthdays_dict:
+    with smtplib.SMTP("smtp.gmail.com", 587) as connection:
+    # connection = smtplib.SMTP("smtp.mail.yahoo.com")
+        connection.starttls()
+        with open("emailpass.txt", "r") as f:
+            password = f.read()
 
-# 3. If step 2 is true, pick a random letter from letter templates and replace the [NAME] with the person's actual name from birthdays.csv
-# HINT: https://www.w3schools.com/python/ref_string_replace.asp
+        connection.login(my_gmail, password)
+        connection.sendmail(from_addr=my_gmail, to_addrs=to_email,
+                            msg=f"Subject:Happy Birthday!!!\n\n{message}")
 
-# 4. Send the letter generated in step 3 to that person's email address.
-# HINT: Gmail(smtp.gmail.com), Yahoo(smtp.mail.yahoo.com), Hotmail(smtp.live.com), Outlook(smtp-mail.outlook.com)
+
+now = datetime.now()
+today = (now.month, now.day)
+print(today)
+df = pd.read_csv("birthdays.csv")
+bday_dict = {(datarow.month, datarow['day']):datarow for (index, datarow) in df.iterrows()}
+
+
+if today in bday_dict:
+    name = bday_dict[today]['name']
+    email = bday_dict[today]['email']
+    letter_file = f"letter_templates/letter_{random.randint(1,3)}.txt"
+    with open(letter_file, "r") as f:
+        letter = f.read()
+    letter = letter.replace("[NAME]", name)
+    send_email(email, letter)
+
 
 
 
