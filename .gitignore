@@ -1,5 +1,6 @@
 .DS_Store
 .idea/
+emailpass.txt
 
 office/mail-merge/Output/ReadyToSend/*.txt
 
