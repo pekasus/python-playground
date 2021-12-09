@@ -1,5 +1,6 @@
 import requests
 from datetime import datetime, timedelta
+import smtplib
 
 STOCK = "TSLA"
 COMPANY_NAME = "Tesla Inc"
@@ -7,9 +8,7 @@ COMPANY_NAME = "Tesla Inc"
 STOCK_ENDPOINT = "https://www.alphavantage.co/query"
 NEWS_ENDPOINT = "https://newsapi.org/v2/everything"
 
-
-## STEP 1: Use https://newsapi.org/docs/endpoints/everything
-# When STOCK price increase/decreases by 5% between yesterday and the day before yesterday then print("Get News").
+#TODO include up or down arrow and percentage in email subject line and message body.
 
 with open("pass.txt", "r") as f:
     alpha_key = f.read()
@@ -23,10 +22,21 @@ def get_news(company):
         "apiKey": news_key
     }
     response = requests.get(NEWS_ENDPOINT, params=news_params)
-    data = response.json()['articles']
-    for article in data:
-        print(article)
+    return response.json()['articles']
 
+def send_email(message, ticker):
+    my_gmail = "NyetWork001@gmail.com"
+    my_yahoo = "NyetWork001@yahoo.com"
+
+    with smtplib.SMTP("smtp.gmail.com", 587) as connection:
+    # connection = smtplib.SMTP("smtp.mail.yahoo.com")
+        connection.starttls()
+        with open("emailpass.txt", "r") as f:
+            password = f.read()
+
+        connection.login(my_gmail, password)
+        connection.sendmail(from_addr=my_gmail, to_addrs=my_yahoo,
+                            msg=f"Subject:{ticker} News Alert\n\n{message}")
 
 # https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=IBM&apikey=demo
 alpha_params = {
@@ -49,19 +59,11 @@ day_before_close = float(data[day_before]['4. close'])
 diff_percent = (abs(yesterday_close - day_before_close)) / yesterday_close
 
 if diff_percent >= 0.005: # DEBUG change to 0.05 for production
-    get_news(COMPANY_NAME)
-
-
-## STEP 2: Use https://newsapi.org/docs/endpoints/everything
-# Instead of printing ("Get News"), actually fetch the first 3 articles for the COMPANY_NAME. 
-#HINT 1: Think about using the Python Slice Operator
-
-
-
-## STEP 3: Use twilio.com/docs/sms/quickstart/python
-# Send a separate message with each article's title and description to your phone number. 
-#HINT 1: Consider using a List Comprehension.
-
+    data = get_news(COMPANY_NAME)[:3]
+    message = ""
+    for article in data:
+        message += f"{article['title']}\n{article['description']}\n{article['url']}\n\n"
+    send_email(message, STOCK)
 
 
 #Optional: Format the SMS message like this: 
