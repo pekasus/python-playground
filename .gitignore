@@ -2,6 +2,8 @@
 .idea/
 emailpass.txt
 pass.txt
+pass*.txt
+api-keys.txt
 
 office/mail-merge/Output/ReadyToSend/*.txt
 
