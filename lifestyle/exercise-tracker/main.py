@@ -5,6 +5,7 @@ APP_ID = "bf33899a"
 with open("pass.txt", "r") as f:
     API_KEY = f.read()
 
+# Nyetwork001
 with open("pass2.txt", "r") as f:
     SHEET_ID = f.read()
 
@@ -54,14 +55,14 @@ for exercise in result["exercises"]:
 # POST REQUEST WITHOUT AUTH
 # sheet_response = requests.post(SHEET_ENDPOINT, json=sheet_inputs)
 
-sheet_header = {
+sheet_headers = {
     "Authorization": f"Bearer {SHEET_AUTH}"
 }
 
 sheet_response = requests.post(
-    sheet_endpoint,
+    SHEET_ENDPOINT,
     json=sheet_inputs,
-    headers=bearer_headers
+    headers=sheet_headers
 )
 
 print(sheet_response.text)
