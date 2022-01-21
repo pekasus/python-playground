@@ -1,0 +1,1 @@
+vim:https://www.shortcutfoo.com/app/dojos/vim/cheatsheet
