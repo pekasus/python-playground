@@ -1,1 +1,13 @@
 vim:https://www.shortcutfoo.com/app/dojos/vim/cheatsheet
+command-line
+sublime-text-3-win
+vscode-win
+pycharm-win/cheatsheet
+git
+tmux
+python-regex
+qutebrowser
+python-strings
+javascript-strings
+javascript-arrays
+regex
